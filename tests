@@ -1,1 +1,26 @@
+import pytest
+from src.eight_queens import solve_n_queens, get_solution_count
 
+# 标准已知结果：4皇后2种解，8皇后92种解
+standard_cases = [
+    (4, 2),
+    (8, 92)
+]
+
+# 参数化测试：校验N=4、N=8的解数量是否正确
+@pytest.mark.parametrize("n, expect_num", standard_cases)
+def test_solution_total(n, expect_num):
+    assert get_solution_count(n) == expect_num
+
+def test_board_format_legal():
+    # 校验棋盘输出格式、皇后摆放规则合法
+    solutions = solve_n_queens(4)
+    for chess_board in solutions:
+        # 棋盘行数等于N
+        assert len(chess_board) == 4
+        for line in chess_board:
+            # 每行长度等于N，且每行只有1个皇后Q
+            assert len(line) == 4
+            assert line.count("Q") == 1
+            # 不存在多余皇后
+            assert line.count("Q") <= 1
